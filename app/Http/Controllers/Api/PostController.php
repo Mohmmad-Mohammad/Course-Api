@@ -18,11 +18,19 @@ class PostController extends Controller
 
     public function show($id)
     {
-        $post = new PostResource(Post::find($id));
+        $post = Post::find($id);
         if($post){
-            return $this->api($post,null,200);
+            return $this->api(new PostResource($post),null,200);
         }
         return $this->api(null,"Not Found",404);
     }
 
+    public function store(Request $request)
+    {
+        $post = Post::create($request->all());
+        if($post){
+            return $this->api(new PostResource($post),null,201);
+        }
+        return $this->api(null,"The Post Not Save",400);
+    }
 }
